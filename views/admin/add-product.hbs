@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-6 m-auto">
+        <div class="container mt-5 pl-5">
+            <h2 class="text-center">Create new Account</h2>
+                <form action="/signup" method="post" id="createAccount">
+                    <div class="form-group">
+                        <label for="Password">Name</label>
+                        <input type="text" name="Name" id="" class="form-control" placeholder="Enter name">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Email Address</label>
+                        <input type="email" name="Email" id="" class="form-control" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Password</label>
+                        <input type="password" name="Password" id="" class="form-control" placeholder="Password">
+                    </div>
+                    <center><button type="submit" class="btn btn-primary float-center">Create Account</button></center>
+                    
+                </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js"></script>
+<script src="/vendors/formvalidation/dist/js/FormValidation.min.js"></script>
+<script src="/vendors/formvalidation/dist/js/plugins/Tachyons.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function (e) {
+        FormValidation.formValidation(document.getElementById('createAccount'), {
+            fields: {
+                Email: {
+                    validators: {
+                        callback: {
+                            message: 'The value is not a valid email address',
+                            callback: function (input) {
+                                const value = input.value;
+                                if (value === '') {
+                                    return true;
+                                }
+
+                                // I want the value has to pass both emailAddress and regexp validators
+                                return (
+                                    FormValidation.validators.emailAddress().validate({
+                                        value: value,
+                                    }).valid &&
+                                    FormValidation.validators.regexp().validate({
+                                        value: value,
+                                        options: {
+                                            regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                                        },
+                                    }).valid
+                                );
+                            },
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                tachyons: new FormValidation.plugins.Tachyons(),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                icon: new FormValidation.plugins.Icon({
+                    valid: 'fa fa-check',
+                    invalid: 'fa fa-times',
+                    validating: 'fa fa-refresh',
+                }),
+            },
+        });
+    });
+</script>
